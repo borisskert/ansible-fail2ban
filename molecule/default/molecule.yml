@@ -8,10 +8,14 @@ driver:
     name: virtualbox
 
 platforms:
-  - name: ubuntu-bionic
-    box: ubuntu/bionic64
+  - name: ubuntu-xenial
+    box: ubuntu/xenial64
     instance_raw_config_args:
       - 'vm.network "private_network", ip: "192.168.33.54"'
+  - name: ubuntu-bionic
+    box: ubuntu/bionic64
+  - name: ubuntu-focal
+    box: ubuntu/focal64
 
 provisioner:
   name: ansible

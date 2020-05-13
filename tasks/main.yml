@@ -26,3 +26,28 @@
     content: "{{ item.content }}"
   loop: "{{ action_d }}"
   notify: Restart fail2ban
+
+- name: Setup filter.d config
+  copy:
+    dest: "/etc/fail2ban/filter.d/{{ item.name }}"
+    content: "{{ item.content }}"
+  loop: "{{ filter_d }}"
+  notify: Restart fail2ban
+
+- name: Remove unneeded files in jail.d
+  include: remove-unneded-files.yml
+  vars:
+    files: "{{ jail_d }}"
+    path: /etc/fail2ban/jail.d
+
+- name: Remove unneeded files in action.d
+  include: remove-unneded-files.yml
+  vars:
+    files: "{{ action_d }}"
+    path: /etc/fail2ban/action.d
+
+- name: Remove unneeded files in filter.d
+  include: remove-unneded-files.yml
+  vars:
+    files: "{{ filter_d }}"
+    path: /etc/fail2ban/filter.d

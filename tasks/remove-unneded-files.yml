@@ -1,0 +1,35 @@
+---
+- name: "Determine intended config files in {{ path }}"
+  set_fact:
+    intended_file_paths: >
+      {{
+      files
+      | selectattr('name', 'defined')
+      | map(attribute='name')
+      | map('regex_replace', '^(.*)$', '{{ path }}/\1')
+      | list
+      }}
+
+- name: "Search for existing config files in {{ path }}"
+  find:
+    paths: "{{ path }}"
+    patterns: '*.local'
+  register: existing_files
+
+- name: "Determine config files to be removed in {{ path }}"
+  set_fact:
+    files_to_remove_paths: >
+      {{
+      existing_files.files
+      | selectattr('path', 'defined')
+      | map(attribute='path')
+      | reject('in', intended_file_paths)
+      | list
+      }}
+
+- name: "Remove unneeded configs in {{ path }}"
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ files_to_remove_paths }}"
+  notify: Restart fail2ban

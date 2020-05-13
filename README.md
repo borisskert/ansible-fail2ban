@@ -26,7 +26,17 @@ Setup role to install and configure fail2ban.
 
 | Variable name  | Type  | Mandatory?  | Default value             | Description |
 |----------------|-------|-------------|---------------------------|-------------|
-| jail           | array of `jail_config` | no | []                | Your local jail configuration |
+| jail_local     | text  | no          |                           | Place the content of your `jail.local` here |
+| jail_d         | array of `text_file` | no | []                  | Your local jail.d configuration files       |
+| action_d       | array of `text_file` | no | []                  | Your local action.d configuration files     |
+| filter_d       | array of `text_file` | no | []                  | Your local filter.d configuration files     |
+
+### Definition `text_file`
+
+| Variable name  | Type  | Mandatory?  | Default value | Description |
+|----------------|-------|-------------|---------------|-------------|
+| name           | filename | yes      |               | name of the file |
+| content        | text     | yes      |               | content of the text file |
 
 ## Dependencies
 
@@ -51,19 +61,32 @@ TBD.
 ### Typical `playbook.yml`
 
 ```yaml
+---
 - name: Typical
   hosts: all
+  become: true
 
   roles:
     - role: setup-fail2ban
-      jail:
+      jail_local: |
+        [DEFAULT]
+        ignoreip = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+        bantime = 86400
+        banaction = route
+      action_d:
+        - name: route.local
+          content: |
+            [Definition]
+            actionban   = ip route add <blocktype> <ip>
+            actionunban = ip route del <blocktype> <ip>
+
+            [Init]
+            blocktype = unreachable
+      jail_d:
         - name: ssh.local
           content: |
             [sshd]
             enabled = true
-
-            [DEFAULT]
-            ignoreip = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
 ```
 
 ## License
