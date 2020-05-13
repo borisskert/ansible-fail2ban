@@ -1,8 +1,7 @@
 ---
-# This is an example playbook to execute Ansible tests.
-
 - name: Verify
   hosts: all
+
   tasks:
     - name: Should not miss package
       package:
@@ -10,3 +9,36 @@
         state: present
       register: verify_package_install
       failed_when: verify_package_install.changed
+
+    - name: Should create jail file for ssh
+      stat:
+        path: /etc/fail2ban/jail.d/ssh.local
+        checksum_algorithm: sha256
+      register: jail_d_local
+      failed_when: not (
+        jail_d_local.stat.exists
+        and jail_d_local.stat.checksum
+        == '2f4339e06eca824d2b19eb8ec130401263453b4b34209e82db5c8d888d0f8352'
+        )
+
+    - name: Should create route action file
+      stat:
+        path: /etc/fail2ban/action.d/route.conf
+        checksum_algorithm: sha256
+      register: route_action
+      failed_when: not (
+        route_action.stat.exists
+        and route_action.stat.checksum
+        == 'f3e9bae918cce9e9c7a31a8dbba5eb08e0671d158b49e246e15cb0cb892d77ce'
+        )
+
+    - name: Should create jail.local file
+      stat:
+        path: /etc/fail2ban/jail.local
+        checksum_algorithm: sha256
+      register: jail_local
+      failed_when: not (
+        jail_local.stat.exists
+        and jail_local.stat.checksum
+        == 'd39ca7754e9511262a29151749b3fe1b75b00a1adc9f594e06eee5074caa6394'
+        )

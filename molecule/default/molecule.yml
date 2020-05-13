@@ -1,13 +1,20 @@
 ---
 dependency:
   name: galaxy
+
 driver:
-  name: docker
+  name: vagrant
+  provider:
+    name: virtualbox
+
 platforms:
-  - name: instance
-    image: docker.io/pycontribs/ubuntu
-    pre_build_image: true
+  - name: ubuntu-bionic
+    box: ubuntu/bionic64
+    instance_raw_config_args:
+      - 'vm.network "private_network", ip: "192.168.33.54"'
+
 provisioner:
   name: ansible
+
 verifier:
   name: ansible

@@ -1,7 +1,23 @@
 ---
 - name: Converge
   hosts: all
-  tasks:
-    - name: "Include ansible-fail2ban"
-      include_role:
-        name: "ansible-fail2ban"
+  become: true
+
+  roles:
+    - role: ansible-fail2ban
+      jail_local: |
+        banaction = route
+      action_d:
+        - name: route.conf
+          content: |
+            [Definition]
+            actionban = ip route add unreachable IP
+            actionunban = ip route del unreachable IP
+      jail_d:
+        - name: ssh.local
+          content: |
+            [sshd]
+            enabled = true
+
+            [DEFAULT]
+            ignoreip = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
