@@ -4,6 +4,9 @@
 - name: Verify
   hosts: all
   tasks:
-  - name: Example assertion
-    assert:
-      that: true
+    - name: Should not miss package
+      package:
+        name: fail2ban
+        state: present
+      register: verify_package_install
+      failed_when: verify_package_install.changed

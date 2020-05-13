@@ -1,2 +1,5 @@
 ---
-# tasks file for ansible-fail2ban
+- name: Install package
+  package:
+    name: fail2ban
+    state: present
