@@ -7,9 +7,9 @@ Setup role to install and configure fail2ban.
 ### For development and testing
 
 * python 3
-* yamllint (brew package)
-* ansible (brew package)
-* ansible-lint (brew package)
+* yamllint
+* ansible
+* ansible-lint (pip package)
 * molecule (pip package)
 * molecule-vagrant (pip package)
 * Vagrant
@@ -46,7 +46,11 @@ None so far.
 
 ### Add to `requirements.yml`
 
-TBD.
+```yaml
+- name: setup-fail2ban
+  src: https://github.com/borisskert/ansible-fail2ban.git
+  scm: git
+```
 
 ### Minimal `playbook.yml`
 
@@ -87,6 +91,12 @@ TBD.
           content: |
             [sshd]
             enabled = true
+            filter = sshd
+      filter_d:
+        - name: sshd.local
+          content: |
+            [INCLUDES]
+            before = common.conf
 ```
 
 ## License

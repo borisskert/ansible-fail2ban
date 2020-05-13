@@ -1,11 +1,12 @@
 *******
-Docker driver installation guide
+Vagrant driver installation guide
 *******
 
 Requirements
 ============
 
-* Docker Engine
+* Vagrant
+* VirtualBox
 
 Install
 =======
@@ -19,4 +20,4 @@ widely recommended `'--user' flag`_ when invoking ``pip``.
 
 .. code-block:: bash
 
-    $ python3 -m pip install 'molecule[docker]'
+    $ python3 -m pip install 'molecule-vagrant'
