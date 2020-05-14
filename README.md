@@ -99,6 +99,37 @@ None so far.
             before = common.conf
 ```
 
+## Linting
+
+`molecule` is checking the code style of this project, but you can
+ check the concrete errors with the following commands: 
+
+### Yamllint
+
+```shell script
+yamllint . --strict
+```
+
+### Ansible-lint
+
+```shell script
+ansible-lint
+```
+
+## Tests
+
+### Running tests in docker environment
+
+```shell script
+molecule test
+```
+
+### Running tests in Vagrant/VirtualBox environment
+
+```shell script
+molecule --scenario-name vagrant
+```
+
 ## License
 
 MIT

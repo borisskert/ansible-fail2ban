@@ -2,20 +2,18 @@
 dependency:
   name: galaxy
 
+lint: |
+  set -e
+  yamllint . --strict
+  ansible-lint
+
 driver:
-  name: vagrant
-  provider:
-    name: virtualbox
+  name: docker
 
 platforms:
-  - name: ubuntu-xenial
-    box: ubuntu/xenial64
-    instance_raw_config_args:
-      - 'vm.network "private_network", ip: "192.168.33.54"'
-  - name: ubuntu-bionic
-    box: ubuntu/bionic64
-  - name: ubuntu-focal
-    box: ubuntu/focal64
+  - name: instance
+    image: docker.io/pycontribs/ubuntu
+    pre_build_image: true
 
 provisioner:
   name: ansible

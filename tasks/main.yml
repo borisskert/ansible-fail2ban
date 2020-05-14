@@ -1,6 +1,6 @@
 ---
 - name: Install package
-  apt:
+  package:
     name: fail2ban
     state: present
     update_cache: true

@@ -1,0 +1,81 @@
+---
+- name: Verify
+  hosts: all
+
+  tasks:
+    - name: Should not miss package
+      package:
+        name: fail2ban
+        state: present
+      register: verify_package_install
+      failed_when: verify_package_install.changed
+
+    - name: Should create jail.d file for ssh
+      stat:
+        path: /etc/fail2ban/jail.d/ssh.local
+        checksum_algorithm: sha256
+      register: jail_d_local
+      failed_when: not (
+        jail_d_local.stat.exists
+        and jail_d_local.stat.checksum
+        == 'a0ef437f89cc9c79f40b4f25d2147850343a35645bb2c6ea912602d9eb39a4ff'
+        )
+
+    - name: Should create route action.d file
+      stat:
+        path: /etc/fail2ban/action.d/route.local
+        checksum_algorithm: sha256
+      register: route_action
+      failed_when: not (
+        route_action.stat.exists
+        and route_action.stat.checksum
+        == '2f1f6e2157150f040dedaebcaa54bcd73376483d7a69acbfaa3d845ddaf8c63f'
+        )
+
+    - name: Should create sshd filter.d file
+      stat:
+        path: /etc/fail2ban/filter.d/sshd.local
+        checksum_algorithm: sha256
+      register: sshd_filter
+      failed_when: not (
+        sshd_filter.stat.exists
+        and sshd_filter.stat.checksum
+        == '09432acc588fdad75cea2bd1c867729538b0715d3d934770efa3a2ef6c1a4d20'
+        )
+
+    - name: Should create jail.local file
+      stat:
+        path: /etc/fail2ban/jail.local
+        checksum_algorithm: sha256
+      register: jail_local
+      failed_when: not (
+        jail_local.stat.exists
+        and jail_local.stat.checksum
+        == 'cb966a60071da129a9d42f4d91ccf7852330a24e8411a4c4087498caea7acbef'
+        )
+
+    - name: Should remove other local files in jail.d
+      stat:
+        path: /etc/fail2ban/jail.d/dummy.local
+      register: jail_d_dummy_local
+      failed_when: jail_d_dummy_local.stat.exists
+
+    - name: Should remove other local files in action.d
+      stat:
+        path: /etc/fail2ban/action.d/dummy.local
+      register: action_d_dummy_local
+      failed_when: action_d_dummy_local.stat.exists
+
+    - name: Should remove other local files in filter.d
+      stat:
+        path: /etc/fail2ban/filter.d/dummy.local
+      register: filter_d_dummy_local
+      failed_when: filter_d_dummy_local.stat.exists
+
+    - name: Should start and enable fail2ban service
+      service:
+        name: fail2ban
+        state: started
+        enabled: true
+      register: failban_service
+      failed_when: failban_service.changed

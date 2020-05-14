@@ -1,0 +1,41 @@
+---
+- name: Prepare
+  hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Create directory for dummy file in jail.d
+      file:
+        dest: /etc/fail2ban/jail.d
+        state: directory
+
+    - name: Create dummy file in jail.d to be removed by role
+      copy:
+        dest: /etc/fail2ban/jail.d/dummy.local
+        content: |
+          [dummy]
+          enabled = false
+
+    - name: Create directory for dummy file in action.d
+      file:
+        dest: /etc/fail2ban/action.d
+        state: directory
+
+    - name: Create dummy file in action.d to be removed by role
+      copy:
+        dest: /etc/fail2ban/action.d/dummy.local
+        content: |
+          [Init]
+          name = dummy
+
+    - name: Create directory for dummy file in filter.d
+      file:
+        dest: /etc/fail2ban/filter.d
+        state: directory
+
+    - name: Create dummy file in filter.d to be removed by role
+      copy:
+        dest: /etc/fail2ban/filter.d/dummy.local
+        content: |
+          [INCLUDES]
+          before = common.conf
