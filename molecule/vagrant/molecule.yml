@@ -8,17 +8,30 @@ driver:
     name: virtualbox
 
 platforms:
-  - name: ubuntu-xenial
+  - name: ansible-fail2ban-xenial
     box: ubuntu/xenial64
-    instance_raw_config_args:
-      - 'vm.network "private_network", ip: "192.168.33.54"'
-  - name: ubuntu-bionic
+  - name: ansible-fail2ban-bionic
     box: ubuntu/bionic64
-  - name: ubuntu-focal
+  - name: ansible-fail2ban-focal
     box: ubuntu/focal64
+  - name: ansible-fail2ban-stretch
+    box: debian/stretch64
+    groups:
+      - debian
+  - name: ansible-fail2ban-buster
+    box: debian/buster64
+    groups:
+      - debian
 
 provisioner:
   name: ansible
+  playbooks:
+    prepare: ../shared/prepare.yml
+    converge: ../shared/converge.yml
+  inventory:
+    group_vars:
+      debian:
+        ansible_python_interpreter: /usr/bin/python3
 
 verifier:
   name: ansible
