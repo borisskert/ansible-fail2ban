@@ -1,5 +1,5 @@
 ---
-jail_local: ''
-jail_d: []
-action_d: []
-filter_d: []
+fail2ban_jail_local: ''
+fail2ban_jail_d: []
+fail2ban_action_d: []
+fail2ban_filter_d: []

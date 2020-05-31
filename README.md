@@ -26,10 +26,10 @@ Setup role to install and configure fail2ban.
 
 | Variable name  | Type  | Mandatory?  | Default value             | Description |
 |----------------|-------|-------------|---------------------------|-------------|
-| jail_local     | text  | no          |                           | Place the content of your `jail.local` here |
-| jail_d         | array of `text_file` | no | []                  | Your local jail.d configuration files       |
-| action_d       | array of `text_file` | no | []                  | Your local action.d configuration files     |
-| filter_d       | array of `text_file` | no | []                  | Your local filter.d configuration files     |
+| fail2ban_jail_local     | text  | no          |                           | Place the content of your `jail.local` here |
+| fail2ban_jail_d         | array of `text_file` | no | []                  | Your local jail.d configuration files       |
+| fail2ban_action_d       | array of `text_file` | no | []                  | Your local action.d configuration files     |
+| fail2ban_filter_d       | array of `text_file` | no | []                  | Your local filter.d configuration files     |
 
 ### Definition `text_file`
 
@@ -72,12 +72,12 @@ None so far.
 
   roles:
     - role: setup-fail2ban
-      jail_local: |
+      fail2ban_jail_local: |
         [DEFAULT]
         ignoreip = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
         bantime = 86400
         banaction = route
-      action_d:
+      fail2ban_action_d:
         - name: route.local
           content: |
             [Definition]
@@ -86,13 +86,13 @@ None so far.
 
             [Init]
             blocktype = unreachable
-      jail_d:
+      fail2ban_jail_d:
         - name: ssh.local
           content: |
             [sshd]
             enabled = true
             filter = sshd
-      filter_d:
+      fail2ban_filter_d:
         - name: sshd.local
           content: |
             [INCLUDES]
@@ -116,19 +116,32 @@ yamllint . --strict
 ansible-lint
 ```
 
-## Tests
+## Testing
 
-### Running tests in docker environment
+Requirements:
+
+* [Vagrant](https://www.vagrantup.com/)
+* [VirtualBox](https://www.virtualbox.org/)
+* [Ansible](https://docs.ansible.com/)
+* [Molecule](https://molecule.readthedocs.io/en/latest/index.html)
+* [yamllint](https://yamllint.readthedocs.io/en/stable/#)
+* [ansible-lint](https://docs.ansible.com/ansible-lint/)
+* [Docker](https://docs.docker.com/)
+
+### Run within docker
 
 ```shell script
 molecule test
 ```
 
-### Running tests in Vagrant/VirtualBox environment
+### Run within Vagrant
 
 ```shell script
-molecule --scenario-name vagrant
+ molecule test --scenario-name vagrant --parallel
 ```
+
+I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.
+Within the Github Actions pipeline I use [my own molecule Docker image](https://github.com/borisskert/docker-molecule).
 
 ## License
 

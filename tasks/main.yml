@@ -8,46 +8,46 @@
 - name: Setup jail.local config
   copy:
     dest: /etc/fail2ban/jail.local
-    content: "{{ jail_local }}"
-  when: jail_local is defined
-    and jail_local | length > 0
+    content: "{{ fail2ban_jail_local }}"
+  when: fail2ban_jail_local is defined
+    and fail2ban_jail_local | length > 0
   notify: Restart fail2ban
 
 - name: Setup jail.d config
   copy:
     dest: "/etc/fail2ban/jail.d/{{ item.name }}"
     content: "{{ item.content }}"
-  loop: "{{ jail_d }}"
+  loop: "{{ fail2ban_jail_d }}"
   notify: Restart fail2ban
 
 - name: Setup action.d config
   copy:
     dest: "/etc/fail2ban/action.d/{{ item.name }}"
     content: "{{ item.content }}"
-  loop: "{{ action_d }}"
+  loop: "{{ fail2ban_action_d }}"
   notify: Restart fail2ban
 
 - name: Setup filter.d config
   copy:
     dest: "/etc/fail2ban/filter.d/{{ item.name }}"
     content: "{{ item.content }}"
-  loop: "{{ filter_d }}"
+  loop: "{{ fail2ban_filter_d }}"
   notify: Restart fail2ban
 
 - name: Remove unneeded files in jail.d
   include: remove-unneded-files.yml
   vars:
-    files: "{{ jail_d }}"
+    files: "{{ fail2ban_jail_d }}"
     path: /etc/fail2ban/jail.d
 
 - name: Remove unneeded files in action.d
   include: remove-unneded-files.yml
   vars:
-    files: "{{ action_d }}"
+    files: "{{ fail2ban_action_d }}"
     path: /etc/fail2ban/action.d
 
 - name: Remove unneeded files in filter.d
   include: remove-unneded-files.yml
   vars:
-    files: "{{ filter_d }}"
+    files: "{{ fail2ban_filter_d }}"
     path: /etc/fail2ban/filter.d

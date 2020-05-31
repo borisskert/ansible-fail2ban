@@ -5,12 +5,12 @@
 
   roles:
     - role: ansible-fail2ban
-      jail_local: |
+      fail2ban_jail_local: |
         [DEFAULT]
         ignoreip = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
         bantime = 60
         banaction = route
-      action_d:
+      fail2ban_action_d:
         - name: route.local
           content: |
             [Definition]
@@ -19,13 +19,13 @@
 
             [Init]
             blocktype = unreachable
-      jail_d:
+      fail2ban_jail_d:
         - name: ssh.local
           content: |
             [sshd]
             enabled = true
             filter = sshd
-      filter_d:
+      fail2ban_filter_d:
         - name: sshd.local
           content: |
             [INCLUDES]
