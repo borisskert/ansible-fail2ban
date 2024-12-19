@@ -35,19 +35,19 @@
   notify: Restart fail2ban
 
 - name: Remove unneeded files in jail.d
-  include: remove-unneded-files.yml
+  include_tasks: remove-unneded-files.yml
   vars:
     files: "{{ fail2ban_jail_d }}"
     path: /etc/fail2ban/jail.d
 
 - name: Remove unneeded files in action.d
-  include: remove-unneded-files.yml
+  include_tasks: remove-unneded-files.yml
   vars:
     files: "{{ fail2ban_action_d }}"
     path: /etc/fail2ban/action.d
 
 - name: Remove unneeded files in filter.d
-  include: remove-unneded-files.yml
+  include_tasks: remove-unneded-files.yml
   vars:
     files: "{{ fail2ban_filter_d }}"
     path: /etc/fail2ban/filter.d
