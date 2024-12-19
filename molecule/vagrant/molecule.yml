@@ -8,18 +8,18 @@ driver:
     name: virtualbox
 
 platforms:
-  - name: ansible-fail2ban-xenial
-    box: ubuntu/xenial64
-  - name: ansible-fail2ban-bionic
-    box: ubuntu/bionic64
+  - name: ansible-fail2ban-noble
+    box: cloud-image/ubuntu-24.04
+  - name: ansible-fail2ban-jammy
+    box: cloud-image/ubuntu-22.04
   - name: ansible-fail2ban-focal
-    box: ubuntu/focal64
-  - name: ansible-fail2ban-stretch
-    box: debian/stretch64
+    box: cloud-image/ubuntu-20.04
+  - name: ansible-fail2ban-bookworm
+    box: cloud-image/debian-12
     groups:
       - debian
-  - name: ansible-fail2ban-buster
-    box: debian/buster64
+  - name: ansible-fail2ban-bullseye
+    box: cloud-image/debian-11
     groups:
       - debian
 
