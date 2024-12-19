@@ -18,25 +18,28 @@ Setup role to install and configure fail2ban.
 ### On server
 
 * Ubuntu
-  * 16.04
-  * 18.04
+  * 24.04
+  * 22.04
   * 20.04
+* Debian
+  * 12
+  * 11
 
 ## Role Variables
 
-| Variable name  | Type  | Mandatory?  | Default value             | Description |
-|----------------|-------|-------------|---------------------------|-------------|
-| fail2ban_jail_local     | text  | no          |                           | Place the content of your `jail.local` here |
-| fail2ban_jail_d         | array of `text_file` | no | []                  | Your local jail.d configuration files       |
-| fail2ban_action_d       | array of `text_file` | no | []                  | Your local action.d configuration files     |
-| fail2ban_filter_d       | array of `text_file` | no | []                  | Your local filter.d configuration files     |
+| Variable name       | Type                 | Mandatory? | Default value | Description                                 |
+|---------------------|----------------------|------------|---------------|---------------------------------------------|
+| fail2ban_jail_local | text                 | no         |               | Place the content of your `jail.local` here |
+| fail2ban_jail_d     | array of `text_file` | no         | []            | Your local jail.d configuration files       |
+| fail2ban_action_d   | array of `text_file` | no         | []            | Your local action.d configuration files     |
+| fail2ban_filter_d   | array of `text_file` | no         | []            | Your local filter.d configuration files     |
 
 ### Definition `text_file`
 
-| Variable name  | Type  | Mandatory?  | Default value | Description |
-|----------------|-------|-------------|---------------|-------------|
-| name           | filename | yes      |               | name of the file |
-| content        | text     | yes      |               | content of the text file |
+| Variable name | Type     | Mandatory? | Default value | Description              |
+|---------------|----------|------------|---------------|--------------------------|
+| name          | filename | yes        |               | name of the file         |
+| content       | text     | yes        |               | content of the text file |
 
 ## Dependencies
 
@@ -121,7 +124,7 @@ ansible-lint
 Requirements:
 
 * [Vagrant](https://www.vagrantup.com/)
-* [VirtualBox](https://www.virtualbox.org/)
+* [libvirt](https://libvirt.org/)
 * [Ansible](https://docs.ansible.com/)
 * [Molecule](https://molecule.readthedocs.io/en/latest/index.html)
 * [yamllint](https://yamllint.readthedocs.io/en/stable/#)
@@ -141,7 +144,7 @@ molecule test
 ```
 
 I recommend to use [pyenv](https://github.com/pyenv/pyenv) for local testing.
-Within the Github Actions pipeline I use [my own molecule Docker image](https://github.com/borisskert/docker-molecule).
+Within the GitHub Actions pipeline I use [my own molecule action](https://github.com/borisskert/molecule-action).
 
 ## License
 
